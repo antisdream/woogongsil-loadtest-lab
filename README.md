@@ -2,7 +2,14 @@
 
 우공실 서비스의 성능 검증을 별도로 관리하기 위한 부하 테스트 저장소입니다.
 
-이 저장소는 서비스 코드 저장소인 `antisdream/woogongsil`과 분리해 운영합니다. 우공실 본 저장소는 애플리케이션 코드와 배포 문서를 중심으로 관리하고, 이 저장소는 k6, Prometheus, Grafana 기반의 성능 테스트 환경과 테스트 기록을 관리합니다.
+이 저장소는 서비스 코드 저장소인 [antisdream/woogongsil](https://github.com/antisdream/woogongsil)과 분리해 운영합니다. 우공실 본 저장소는 애플리케이션 코드와 배포 문서를 중심으로 관리하고, 이 저장소는 k6, Prometheus, Grafana 기반의 성능 테스트 환경과 테스트 기록을 관리합니다.
+
+## 관련 저장소
+
+| 구분 | 저장소 | 역할 |
+|---|---|---|
+| 서비스 코드 | [antisdream/woogongsil](https://github.com/antisdream/woogongsil) | 우공실 애플리케이션 코드, 배포 문서, 운영 기준 관리 |
+| 성능 테스트 | [antisdream/woogongsil-loadtest-lab](https://github.com/antisdream/woogongsil-loadtest-lab) | k6, Prometheus, Grafana 기반 부하 테스트 환경과 테스트 기록 관리 |
 
 ## 구성
 
@@ -86,4 +93,3 @@ docker compose -f docker-compose.monitor.yml run --rm `
 - 테스트 중간 백업 파일
 
 회차별 문서는 원문 블로그와 로컬 결과를 바탕으로 공개 가능한 수준의 목적, 조건, 결과, 개선 방향만 정리합니다.
-
