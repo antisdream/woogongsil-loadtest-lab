@@ -1,0 +1,25 @@
+# Local credentials and environment overrides
+.env
+.env.*
+!.env.example
+
+# Raw load-test outputs and discovery logs can include local paths,
+# headers, cookies, route maps, or large transient reports.
+results/
+*.log
+*.tmp
+*.bak
+*.csv
+*.txt
+
+# Historical scratch copies kept locally but not published.
+**/*before*
+**/*backup*
+**/*cleanup*
+
+# OS and editor metadata
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+

@@ -1,0 +1,11 @@
+﻿apiVersion: 1
+
+providers:
+  - name: "WGS Dashboards"
+    orgId: 1
+    folder: "WGS Load Test"
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /var/lib/grafana/dashboards
