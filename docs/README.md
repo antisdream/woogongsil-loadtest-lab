@@ -7,7 +7,7 @@
 | 1차 | 2026-05-31 15:19 | Docker 기반 부하 테스트 환경 구성 | [2026-05-31-loadtest-01.md](./2026-05-31-loadtest-01.md) | [Naver Blog](https://blog.naver.com/andisdream/224301694314) |
 | 2차 | 2026-06-03 20:10 | 공개 GET API 부하 흐름 점검 | [2026-06-03-loadtest-02.md](./2026-06-03-loadtest-02.md) | [Naver Blog](https://blog.naver.com/andisdream/224304996395) |
 | 3차 | 2026-06-07 14:58 | 문제은행 조회 API 중심 부하 테스트 | [2026-06-07-loadtest-03.md](./2026-06-07-loadtest-03.md) | [Naver Blog](https://blog.naver.com/andisdream/224308514804) |
-| 4차 | 2026-06-20 | 기준선, Spike, Stress 공개 GET 부하 테스트 | [2026-06-20-loadtest-04.md](./2026-06-20-loadtest-04.md) | [Naver Blog](https://blog.naver.com/andisdream/224321809266) |
+| 4차 | 2026-06-20 15:43 | 기준선, Spike, Stress 공개 GET 부하 테스트 | [2026-06-20-loadtest-04.md](./2026-06-20-loadtest-04.md) | [Naver Blog](https://blog.naver.com/andisdream/224321809266) |
 
 ## 문서화 기준
 
