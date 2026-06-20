@@ -1,399 +1,570 @@
-﻿{
-  "dashboard": {
-    "id": null,
-    "uid": "wgs-k6-loadtest",
-    "title": "WGS k6 Load Test Dashboard",
-    "tags": ["wgs", "k6", "prometheus", "loadtest"],
-    "timezone": "browser",
-    "schemaVersion": 39,
-    "version": 1,
-    "refresh": "5s",
-    "time": {
-      "from": "now-5m",
-      "to": "now"
+{
+  "id": null,
+  "uid": "wgs-k6-loadtest",
+  "title": "WGS k6 Load Test Dashboard",
+  "tags": [
+    "wgs",
+    "k6",
+    "prometheus",
+    "loadtest"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "5s",
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "RPS - 초당 요청 수",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate(k6_http_reqs_total[10s]))",
+          "legendFormat": "RPS"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "decimals": 2
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto"
+      }
     },
-    "panels": [
-      {
-        "id": 1,
-        "type": "stat",
-        "title": "RPS - 초당 요청 수",
-        "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "sum(rate(k6_http_reqs_total[10s]))",
-            "legendFormat": "RPS"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "reqps",
-            "decimals": 2
-          },
-          "overrides": []
-        },
-        "options": {
-          "reduceOptions": {
-            "values": false,
-            "calcs": ["lastNotNull"],
-            "fields": ""
-          },
-          "orientation": "auto",
-          "textMode": "auto",
-          "colorMode": "value",
-          "graphMode": "area",
-          "justifyMode": "auto"
-        }
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "VU - 현재 가상 사용자 수",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 0
       },
-      {
-        "id": 2,
-        "type": "stat",
-        "title": "VU - 현재 가상 사용자 수",
-        "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "max(k6_vus)",
-            "legendFormat": "VU"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "decimals": 0
-          },
-          "overrides": []
-        },
-        "options": {
-          "reduceOptions": {
-            "values": false,
-            "calcs": ["lastNotNull"],
-            "fields": ""
-          },
-          "orientation": "auto",
-          "textMode": "auto",
-          "colorMode": "value",
-          "graphMode": "area",
-          "justifyMode": "auto"
-        }
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
       },
-      {
-        "id": 3,
-        "type": "stat",
-        "title": "p95 응답 시간",
-        "gridPos": { "h": 4, "w": 6, "x": 12, "y": 0 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "max({__name__=~\"k6_http_req_duration.*p95\"})",
-            "legendFormat": "p95"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "ms",
-            "decimals": 2,
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                { "color": "green", "value": null },
-                { "color": "yellow", "value": 500 },
-                { "color": "red", "value": 2000 }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "options": {
-          "reduceOptions": {
-            "values": false,
-            "calcs": ["lastNotNull"],
-            "fields": ""
-          },
-          "orientation": "auto",
-          "textMode": "auto",
-          "colorMode": "value",
-          "graphMode": "area",
-          "justifyMode": "auto"
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "max(k6_vus)",
+          "legendFormat": "VU"
         }
-      },
-      {
-        "id": 4,
-        "type": "stat",
-        "title": "500 에러율",
-        "gridPos": { "h": 4, "w": 6, "x": 18, "y": 0 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "100 * sum(rate(k6_http_reqs_total{status=~\"5..\"}[10s])) / clamp_min(sum(rate(k6_http_reqs_total[10s])), 1)",
-            "legendFormat": "5xx rate"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "percent",
-            "decimals": 2,
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                { "color": "green", "value": null },
-                { "color": "yellow", "value": 1 },
-                { "color": "red", "value": 5 }
-              ]
-            }
-          },
-          "overrides": []
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 0
         },
-        "options": {
-          "reduceOptions": {
-            "values": false,
-            "calcs": ["lastNotNull"],
-            "fields": ""
-          },
-          "orientation": "auto",
-          "textMode": "auto",
-          "colorMode": "value",
-          "graphMode": "area",
-          "justifyMode": "auto"
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "p95 응답 시간",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 0
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "max({__name__=~\"k6_http_req_duration.*p95\"})",
+          "legendFormat": "p95"
         }
-      },
-      {
-        "id": 5,
-        "type": "timeseries",
-        "title": "RPS 변화",
-        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "sum(rate(k6_http_reqs_total[10s]))",
-            "legendFormat": "RPS"
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 500
+              },
+              {
+                "color": "red",
+                "value": 2000
+              }
+            ]
           }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "reqps",
-            "decimals": 2
-          },
-          "overrides": []
         },
-        "options": {
-          "legend": { "displayMode": "list", "placement": "bottom" },
-          "tooltip": { "mode": "single" }
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "500 에러율",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "100 * sum(rate(k6_http_reqs_total{status=~\"5..\"}[10s])) / clamp_min(sum(rate(k6_http_reqs_total[10s])), 1)",
+          "legendFormat": "5xx rate"
         }
-      },
-      {
-        "id": 6,
-        "type": "timeseries",
-        "title": "VU 변화",
-        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "max_over_time(k6_vus[10s])",
-            "legendFormat": "VU"
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 5
+              }
+            ]
           }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "decimals": 0
-          },
-          "overrides": []
         },
-        "options": {
-          "legend": { "displayMode": "list", "placement": "bottom" },
-          "tooltip": { "mode": "single" }
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "RPS 변화",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate(k6_http_reqs_total[10s]))",
+          "legendFormat": "RPS"
         }
-      },
-      {
-        "id": 7,
-        "type": "timeseries",
-        "title": "p95 / p99 응답 시간",
-        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 12 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "max({__name__=~\"k6_http_req_duration.*p95\"})",
-            "legendFormat": "p95"
-          },
-          {
-            "refId": "B",
-            "expr": "max({__name__=~\"k6_http_req_duration.*p99\"})",
-            "legendFormat": "p99"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "ms",
-            "decimals": 2
-          },
-          "overrides": []
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "decimals": 2
         },
-        "options": {
-          "legend": { "displayMode": "list", "placement": "bottom" },
-          "tooltip": { "mode": "single" }
-        }
+        "overrides": []
       },
-      {
-        "id": 8,
-        "type": "timeseries",
-        "title": "500 에러 수",
-        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 12 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "sum(increase(k6_http_reqs_total{status=~\"5..\"}[2m]))",
-            "legendFormat": "5xx count"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "decimals": 0,
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                { "color": "green", "value": null },
-                { "color": "red", "value": 1 }
-              ]
-            }
-          },
-          "overrides": []
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
         },
-        "options": {
-          "legend": { "displayMode": "list", "placement": "bottom" },
-          "tooltip": { "mode": "single" }
-        }
-      },
-      {
-        "id": 9,
-        "type": "timeseries",
-        "title": "상태 코드별 요청 수",
-        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 20 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "sum by (status) (increase(k6_http_reqs_total[2m]))",
-            "legendFormat": "status {{status}}"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "decimals": 0
-          },
-          "overrides": []
-        },
-        "options": {
-          "legend": { "displayMode": "list", "placement": "bottom" },
-          "tooltip": { "mode": "multi" }
-        }
-      },
-      {
-        "id": 10,
-        "type": "timeseries",
-        "title": "API별 요청 수",
-        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 20 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "sum by (endpoint) (increase(k6_http_reqs_total[2m]))",
-            "legendFormat": "{{endpoint}}"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "decimals": 0
-          },
-          "overrides": []
-        },
-        "options": {
-          "legend": { "displayMode": "list", "placement": "bottom" },
-          "tooltip": { "mode": "multi" }
-        }
-      },
-      {
-        "id": 11,
-        "type": "stat",
-        "title": "총 요청 수 - 최근 5분",
-        "gridPos": { "h": 4, "w": 12, "x": 0, "y": 28 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "sum(increase(k6_http_reqs_total[5m]))",
-            "legendFormat": "total requests"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "decimals": 0
-          },
-          "overrides": []
-        },
-        "options": {
-          "reduceOptions": {
-            "values": false,
-            "calcs": ["lastNotNull"],
-            "fields": ""
-          },
-          "orientation": "auto",
-          "textMode": "auto",
-          "colorMode": "value",
-          "graphMode": "area",
-          "justifyMode": "auto"
-        }
-      },
-      {
-        "id": 12,
-        "type": "stat",
-        "title": "HTTP 실패율",
-        "gridPos": { "h": 4, "w": 12, "x": 12, "y": 28 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "max(k6_http_req_failed_rate) * 100",
-            "legendFormat": "http failed rate"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "percent",
-            "decimals": 2,
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                { "color": "green", "value": null },
-                { "color": "yellow", "value": 1 },
-                { "color": "red", "value": 5 }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "options": {
-          "reduceOptions": {
-            "values": false,
-            "calcs": ["lastNotNull"],
-            "fields": ""
-          },
-          "orientation": "auto",
-          "textMode": "auto",
-          "colorMode": "value",
-          "graphMode": "area",
-          "justifyMode": "auto"
+        "tooltip": {
+          "mode": "single"
         }
       }
-    ]
-  },
-  "folderId": 0,
-  "overwrite": true
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "VU 변화",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "max_over_time(k6_vus[10s])",
+          "legendFormat": "VU"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "type": "timeseries",
+      "title": "p95 / p99 응답 시간",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "max({__name__=~\"k6_http_req_duration.*p95\"})",
+          "legendFormat": "p95"
+        },
+        {
+          "refId": "B",
+          "expr": "max({__name__=~\"k6_http_req_duration.*p99\"})",
+          "legendFormat": "p99"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "decimals": 2
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "type": "timeseries",
+      "title": "500 에러 수",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(increase(k6_http_reqs_total{status=~\"5..\"}[2m]))",
+          "legendFormat": "5xx count"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      }
+    },
+    {
+      "id": 9,
+      "type": "timeseries",
+      "title": "상태 코드별 요청 수",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 20
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (status) (increase(k6_http_reqs_total[2m]))",
+          "legendFormat": "status {{status}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    },
+    {
+      "id": 10,
+      "type": "timeseries",
+      "title": "API별 요청 수",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 20
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (endpoint) (increase(k6_http_reqs_total[2m]))",
+          "legendFormat": "{{endpoint}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    },
+    {
+      "id": 11,
+      "type": "stat",
+      "title": "총 요청 수 - 최근 5분",
+      "gridPos": {
+        "h": 4,
+        "w": 12,
+        "x": 0,
+        "y": 28
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(increase(k6_http_reqs_total[5m]))",
+          "legendFormat": "total requests"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 12,
+      "type": "stat",
+      "title": "HTTP 실패율",
+      "gridPos": {
+        "h": 4,
+        "w": 12,
+        "x": 12,
+        "y": 28
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "max(k6_http_req_failed_rate) * 100",
+          "legendFormat": "http failed rate"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 5
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto"
+      }
+    }
+  ]
 }
-

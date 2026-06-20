@@ -1,303 +1,432 @@
-﻿{
-  "dashboard": {
-    "id": null,
-    "uid": "wgs-k6-loadtest",
-    "title": "WGS k6 Load Test Dashboard v2",
-    "tags": ["wgs", "k6", "prometheus", "loadtest"],
-    "timezone": "browser",
-    "schemaVersion": 39,
-    "version": 2,
-    "refresh": "5s",
-    "time": {
-      "from": "now-5m",
-      "to": "now"
-    },
-    "panels": [
-      {
-        "id": 1,
-        "type": "stat",
-        "title": "RPS",
-        "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "sum(rate(k6_http_reqs_total[10s]))",
-            "legendFormat": "RPS"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "reqps",
-            "decimals": 2
-          },
-          "overrides": []
-        }
-      },
-      {
-        "id": 2,
-        "type": "stat",
-        "title": "Current VUs",
-        "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "max(k6_vus)",
-            "legendFormat": "VUs"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "decimals": 0
-          },
-          "overrides": []
-        }
-      },
-      {
-        "id": 3,
-        "type": "stat",
-        "title": "p95 Response Time",
-        "gridPos": { "h": 4, "w": 6, "x": 12, "y": 0 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "max({__name__=~\"k6_http_req_duration.*p95\"}) * 1000",
-            "legendFormat": "p95 ms"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "ms",
-            "decimals": 2,
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                { "color": "green", "value": null },
-                { "color": "yellow", "value": 500 },
-                { "color": "red", "value": 2000 }
-              ]
-            }
-          },
-          "overrides": []
-        }
-      },
-      {
-        "id": 4,
-        "type": "stat",
-        "title": "5xx Error Rate",
-        "gridPos": { "h": 4, "w": 6, "x": 18, "y": 0 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "100 * ((sum(rate(k6_http_reqs_total{status=~\"5..\"}[10s])) or vector(0)) / clamp_min(sum(rate(k6_http_reqs_total[10s])), 1))",
-            "legendFormat": "5xx %"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "percent",
-            "decimals": 2,
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                { "color": "green", "value": null },
-                { "color": "yellow", "value": 1 },
-                { "color": "red", "value": 5 }
-              ]
-            }
-          },
-          "overrides": []
-        }
-      },
-      {
-        "id": 5,
-        "type": "timeseries",
-        "title": "RPS Over Time",
-        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "sum(rate(k6_http_reqs_total[10s]))",
-            "legendFormat": "RPS"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "reqps",
-            "decimals": 2
-          },
-          "overrides": []
-        }
-      },
-      {
-        "id": 6,
-        "type": "timeseries",
-        "title": "VU Over Time",
-        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "max_over_time(k6_vus[10s])",
-            "legendFormat": "VUs"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "decimals": 0
-          },
-          "overrides": []
-        }
-      },
-      {
-        "id": 7,
-        "type": "timeseries",
-        "title": "p95 / p99 Response Time",
-        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 12 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "max({__name__=~\"k6_http_req_duration.*p95\"}) * 1000",
-            "legendFormat": "p95 ms"
-          },
-          {
-            "refId": "B",
-            "expr": "max({__name__=~\"k6_http_req_duration.*p99\"}) * 1000",
-            "legendFormat": "p99 ms"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "ms",
-            "decimals": 2
-          },
-          "overrides": []
-        }
-      },
-      {
-        "id": 8,
-        "type": "timeseries",
-        "title": "5xx Error Count",
-        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 12 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "sum(increase(k6_http_reqs_total{status=~\"5..\"}[2m])) or vector(0)",
-            "legendFormat": "5xx count"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "decimals": 0,
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                { "color": "green", "value": null },
-                { "color": "red", "value": 1 }
-              ]
-            }
-          },
-          "overrides": []
-        }
-      },
-      {
-        "id": 9,
-        "type": "timeseries",
-        "title": "HTTP Status Count",
-        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 20 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "sum by (status) (increase(k6_http_reqs_total[2m]))",
-            "legendFormat": "status {{status}}"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "decimals": 0
-          },
-          "overrides": []
-        }
-      },
-      {
-        "id": 10,
-        "type": "timeseries",
-        "title": "Endpoint Request Count",
-        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 20 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "sum by (endpoint) (increase(k6_http_reqs_total[2m]))",
-            "legendFormat": "{{endpoint}}"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "decimals": 0
-          },
-          "overrides": []
-        }
-      },
-      {
-        "id": 11,
-        "type": "stat",
-        "title": "Total Requests - Last 5m",
-        "gridPos": { "h": 4, "w": 12, "x": 0, "y": 28 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "sum(increase(k6_http_reqs_total[5m]))",
-            "legendFormat": "total requests"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "decimals": 0
-          },
-          "overrides": []
-        }
-      },
-      {
-        "id": 12,
-        "type": "stat",
-        "title": "HTTP Failed Rate",
-        "gridPos": { "h": 4, "w": 12, "x": 12, "y": 28 },
-        "datasource": { "type": "prometheus", "uid": "PDB162191A2932718" },
-        "targets": [
-          {
-            "refId": "A",
-            "expr": "(max(k6_http_req_failed_rate) or vector(0)) * 100",
-            "legendFormat": "failed %"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "percent",
-            "decimals": 2,
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                { "color": "green", "value": null },
-                { "color": "yellow", "value": 1 },
-                { "color": "red", "value": 5 }
-              ]
-            }
-          },
-          "overrides": []
-        }
-      }
-    ]
+{
+  "id": null,
+  "uid": "wgs-k6-loadtest-v2",
+  "title": "WGS k6 Load Test Dashboard v2",
+  "tags": [
+    "wgs",
+    "k6",
+    "prometheus",
+    "loadtest"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 2,
+  "refresh": "5s",
+  "time": {
+    "from": "now-5m",
+    "to": "now"
   },
-  "folderId": 0,
-  "overwrite": true
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "RPS",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate(k6_http_reqs_total[10s]))",
+          "legendFormat": "RPS"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "decimals": 2
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Current VUs",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "max(k6_vus)",
+          "legendFormat": "VUs"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 0
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "p95 Response Time",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 0
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "max({__name__=~\"k6_http_req_duration.*p95\"}) * 1000",
+          "legendFormat": "p95 ms"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 500
+              },
+              {
+                "color": "red",
+                "value": 2000
+              }
+            ]
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "5xx Error Rate",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "100 * ((sum(rate(k6_http_reqs_total{status=~\"5..\"}[10s])) or vector(0)) / clamp_min(sum(rate(k6_http_reqs_total[10s])), 1))",
+          "legendFormat": "5xx %"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 5
+              }
+            ]
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "RPS Over Time",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate(k6_http_reqs_total[10s]))",
+          "legendFormat": "RPS"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "decimals": 2
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "VU Over Time",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "max_over_time(k6_vus[10s])",
+          "legendFormat": "VUs"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 0
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 7,
+      "type": "timeseries",
+      "title": "p95 / p99 Response Time",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "max({__name__=~\"k6_http_req_duration.*p95\"}) * 1000",
+          "legendFormat": "p95 ms"
+        },
+        {
+          "refId": "B",
+          "expr": "max({__name__=~\"k6_http_req_duration.*p99\"}) * 1000",
+          "legendFormat": "p99 ms"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "decimals": 2
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 8,
+      "type": "timeseries",
+      "title": "5xx Error Count",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(increase(k6_http_reqs_total{status=~\"5..\"}[2m])) or vector(0)",
+          "legendFormat": "5xx count"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 9,
+      "type": "timeseries",
+      "title": "HTTP Status Count",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 20
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (status) (increase(k6_http_reqs_total[2m]))",
+          "legendFormat": "status {{status}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 0
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 10,
+      "type": "timeseries",
+      "title": "Endpoint Request Count",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 20
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (endpoint) (increase(k6_http_reqs_total[2m]))",
+          "legendFormat": "{{endpoint}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 0
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 11,
+      "type": "stat",
+      "title": "Total Requests - Last 5m",
+      "gridPos": {
+        "h": 4,
+        "w": 12,
+        "x": 0,
+        "y": 28
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(increase(k6_http_reqs_total[5m]))",
+          "legendFormat": "total requests"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 0
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 12,
+      "type": "stat",
+      "title": "HTTP Failed Rate",
+      "gridPos": {
+        "h": 4,
+        "w": 12,
+        "x": 12,
+        "y": 28
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PDB162191A2932718"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "(max(k6_http_req_failed_rate) or vector(0)) * 100",
+          "legendFormat": "failed %"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 5
+              }
+            ]
+          }
+        },
+        "overrides": []
+      }
+    }
+  ]
 }
-

@@ -3,6 +3,7 @@
 datasources:
   - name: WGS-Prometheus
     type: prometheus
+    uid: PDB162191A2932718
     access: proxy
     url: http://prometheus:9090
     isDefault: true
