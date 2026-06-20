@@ -81,7 +81,7 @@ docker compose -f docker-compose.monitor.yml run --rm `
 | 1차 | 2026-05-31 15:19 | [2026-05-31-loadtest-01.md](./docs/2026-05-31-loadtest-01.md) | [Naver Blog](https://blog.naver.com/andisdream/224301694314) |
 | 2차 | 2026-06-03 20:10 | [2026-06-03-loadtest-02.md](./docs/2026-06-03-loadtest-02.md) | [Naver Blog](https://blog.naver.com/andisdream/224304996395) |
 | 3차 | 2026-06-07 14:58 | [2026-06-07-loadtest-03.md](./docs/2026-06-07-loadtest-03.md) | [Naver Blog](https://blog.naver.com/andisdream/224308514804) |
-| 4차 | 2026-06-20 | [2026-06-20-loadtest-04.md](./docs/2026-06-20-loadtest-04.md) | 게시 예정 |
+| 4차 | 2026-06-20 | [2026-06-20-loadtest-04.md](./docs/2026-06-20-loadtest-04.md) | [Naver Blog](https://blog.naver.com/andisdream/224321809266) |
 
 ## 공개 관리 기준
 
